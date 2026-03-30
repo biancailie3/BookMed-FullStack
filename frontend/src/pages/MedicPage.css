@@ -1,0 +1,983 @@
+/* ── Google Font ── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+
+/* ── Variabile ── */
+:root {
+    --kaki:        #6b7c5c;
+    --kaki-dark:   #4e5c43;
+    --kaki-light:  #8a9c78;
+    --kaki-bg:     #f5f3ee;
+    --kaki-card:   #edeae2;
+    --gold:        #c9a84c;
+    --gold-light:  #e8cc82;
+    --gold-dark:   #9e7a2a;
+    --text-dark:   #2c2c2c;
+    --text-mid:    #5a5a4a;
+    --text-light:  #8a8a7a;
+    --white:       #ffffff;
+    --radius-card: 20px;
+    --shadow:      0 8px 32px rgba(78,92,67,0.13);
+    --shadow-gold: 0 4px 20px rgba(201,168,76,0.25);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    background-color: var(--kaki-bg);
+    color: var(--text-dark);
+}
+
+/* ══════════════════════════════════════
+   LOADING & SUCCESS
+══════════════════════════════════════ */
+.loading-screen,
+.success-screen {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--kaki-dark);
+    background: var(--kaki-bg);
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--kaki-card);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.success-ornament {
+    font-size: 3rem;
+    color: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.15); opacity: 0.8; }
+}
+
+.success-screen h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--kaki-dark);
+}
+
+.success-screen p {
+    font-size: 1.1rem;
+    color: var(--text-mid);
+    text-align: center;
+}
+
+.success-sub {
+    font-size: 0.9rem !important;
+    color: var(--text-light) !important;
+    font-style: italic;
+}
+
+/* ══════════════════════════════════════
+   PAGE WRAPPER
+══════════════════════════════════════ */
+.medic-page-wrapper {
+    min-height: 100vh;
+    background: var(--kaki-bg);
+    padding-bottom: 80px;
+    padding-top: 64px; /* înălțimea antetului BookMed */
+}
+
+/* ══════════════════════════════════════
+   DOCTOR HERO — split layout
+══════════════════════════════════════ */
+.doctor-hero {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    min-height: 520px;
+    background: linear-gradient(135deg, var(--kaki-dark) 0%, var(--kaki) 100%);
+    overflow: hidden;
+}
+
+/* Ornamente colțuri */
+.hero-ornament {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.18);
+    pointer-events: none;
+    z-index: 2;
+}
+.hero-ornament.top-left     { top: -100px; left: -100px; }
+.hero-ornament.bottom-right { bottom: -100px; right: -100px; }
+
+/* Linie aurie decorativă dreapta */
+.doctor-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 340px; height: 100%;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 520'%3E%3Cpath d='M340,0 Q160,260 340,520' stroke='rgba(201,168,76,0.18)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M340,0 Q200,260 340,520' stroke='rgba(201,168,76,0.08)' stroke-width='1' fill='none'/%3E%3C/svg%3E") no-repeat right center;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── Coloana stânga: poza ── */
+.doctor-photo-col {
+    flex: 0 0 auto;
+    width: 42%;
+    max-width: 480px;
+    position: relative;
+    overflow: hidden;
+    /* Linie aurie verticală care separă cele două coloane */
+    border-right: 1px solid rgba(201,168,76,0.3);
+}
+
+.doctor-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+/* ── Coloana dreapta: info ── */
+.doctor-info {
+    flex: 1;
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 52px;
+    color: var(--white);
+    gap: 18px;
+}
+
+.specialitate-badge {
+    display: inline-block;
+    align-self: flex-start;
+    background: rgba(201,168,76,0.22);
+    border: 1px solid var(--gold-light);
+    color: var(--gold-light);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 5px 18px;
+    border-radius: 100px;
+}
+
+.doctor-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.2rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.1;
+}
+
+/* Linia aurie separatoare */
+.gold-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 240px;
+}
+
+.gold-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-light), transparent);
+}
+.gold-line:last-child {
+    background: linear-gradient(90deg, transparent, var(--gold-light));
+}
+.gold-diamond {
+    color: var(--gold-light);
+    font-size: 0.6rem;
+}
+
+/* Chips meta */
+.doctor-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.meta-chip {
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: rgba(255,255,255,0.92);
+    font-size: 0.85rem;
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+}
+
+.doctor-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.08rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.8;
+    font-style: italic;
+    max-width: 380px;
+}
+
+.doctor-tagline em {
+    color: var(--gold-light);
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* ══════════════════════════════════════
+   TWO-COLUMN LAYOUT
+══════════════════════════════════════ */
+.content-columns {
+    max-width: 1280px;
+    margin: -30px auto 0;
+    padding: 0 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+/* ══════════════════════════════════════
+   BOOKING FLOW
+══════════════════════════════════════ */
+.booking-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ── Step card ── */
+.step-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(201,168,76,0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Accent auriu stânga */
+.step-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 24px; bottom: 24px;
+    width: 3px;
+    background: linear-gradient(180deg, var(--gold-light), var(--gold), var(--gold-dark));
+    border-radius: 0 2px 2px 0;
+}
+
+.step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: var(--white);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-gold);
+}
+
+.step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--kaki-dark);
+    margin-bottom: 2px;
+}
+
+.step-hint {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+}
+
+/* ══════════════════════════════════════
+   CALENDAR
+══════════════════════════════════════ */
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.nav-arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(107,124,92,0.25);
+    background: transparent;
+    color: var(--kaki-dark);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s;
+}
+
+.nav-arrow:hover:not(:disabled) {
+    background: var(--kaki-dark);
+    color: var(--white);
+    border-color: var(--kaki-dark);
+}
+
+.nav-arrow:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+.calendar-month-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--kaki-dark);
+    text-align: center;
+    letter-spacing: 0.06em;
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.calendar-header span {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kaki);
+    padding: 6px 0;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+/* Ziua */
+.zi {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-dark);
+    cursor: pointer;
+    position: relative;
+    transition: background 0.18s, color 0.18s, transform 0.12s;
+}
+
+.zi:hover:not(.inactiva):not(.active) {
+    background: rgba(107, 124, 92, 0.12);
+    color: var(--kaki-dark);
+    transform: scale(1.05);
+}
+
+.zi.azi {
+    font-weight: 600;
+    color: var(--kaki-dark);
+}
+
+.azi-dot {
+    position: absolute;
+    bottom: 3px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+}
+
+.zi.active {
+    background: linear-gradient(135deg, var(--kaki), var(--kaki-dark));
+    color: var(--white);
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(78,92,67,0.35);
+}
+
+.zi.inactiva {
+    color: #c8c8c0;
+    cursor: not-allowed;
+}
+
+.zi.empty {
+    background: transparent;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ══════════════════════════════════════
+   TIME SLOTS
+══════════════════════════════════════ */
+.time-slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.time-button {
+    padding: 10px 20px;
+    border-radius: 100px;
+    border: 1px solid rgba(107,124,92,0.3);
+    background: transparent;
+    color: var(--kaki-dark);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.time-button:hover {
+    border-color: var(--gold);
+    color: var(--gold-dark);
+    background: rgba(201,168,76,0.07);
+}
+
+.time-button.active {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    border-color: var(--gold);
+    color: var(--white);
+    font-weight: 500;
+    box-shadow: var(--shadow-gold);
+}
+
+/* ══════════════════════════════════════
+   MOTIV TEXTAREA
+══════════════════════════════════════ */
+.motiv-wrap {
+    position: relative;
+    margin-bottom: 28px;
+}
+
+.motiv-label {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--kaki-dark);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.motiv-textarea {
+    width: 100%;
+    border: 1px solid rgba(107,124,92,0.3);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: var(--text-dark);
+    background: var(--kaki-bg);
+    resize: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    line-height: 1.6;
+}
+
+.motiv-textarea::placeholder {
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.motiv-textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    background: var(--white);
+}
+
+.motiv-count {
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    font-family: 'Jost', sans-serif;
+}
+
+/* ══════════════════════════════════════
+   REZUMAT PROGRAMARE
+══════════════════════════════════════ */
+.rezumat {
+    background: linear-gradient(135deg, rgba(107,124,92,0.06), rgba(201,168,76,0.06));
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rezumat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.92rem;
+}
+
+.rezumat-row span {
+    color: var(--text-mid);
+    font-weight: 300;
+}
+
+.rezumat-row strong {
+    color: var(--kaki-dark);
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+}
+
+/* ══════════════════════════════════════
+   BUTON CONFIRMARE
+══════════════════════════════════════ */
+.confirm-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 100px;
+    border: none;
+    background: linear-gradient(135deg, var(--kaki-light), var(--kaki-dark));
+    color: var(--white);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.22s;
+    box-shadow: 0 6px 24px rgba(78,92,67,0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.confirm-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.18), transparent);
+    opacity: 0;
+    transition: opacity 0.22s;
+}
+
+.confirm-btn:hover:not(:disabled)::after {
+    opacity: 1;
+}
+
+.confirm-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(78,92,67,0.38);
+}
+
+.confirm-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.confirm-btn.loading,
+.confirm-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.confirm-hint {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 12px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+}
+
+/* ══════════════════════════════════════
+   ANIMAȚIE FADE IN
+══════════════════════════════════════ */
+.fade-in {
+    animation: fadeInUp 0.4s ease both;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+    .content-columns {
+        grid-template-columns: 1fr;
+        padding: 0 16px 60px;
+    }
+
+    .doctor-hero {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .doctor-photo-col {
+        width: 100%;
+        max-width: 100%;
+        max-height: 360px;
+        border-right: none;
+        border-bottom: 1px solid rgba(201,168,76,0.3);
+    }
+
+    .doctor-photo {
+        width: 100%;
+        height: 360px;
+        object-fit: cover;
+        object-position: center top;
+    }
+
+    .doctor-info {
+        padding: 32px 24px 36px;
+        gap: 14px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .specialitate-badge {
+        align-self: center;
+    }
+
+    .gold-divider {
+        max-width: 200px;
+    }
+
+    .doctor-name {
+        font-size: 2.4rem;
+    }
+
+    .doctor-meta {
+        justify-content: center;
+    }
+
+    .step-card {
+        padding: 24px 20px;
+    }
+}
+
+/* ══════════════════════════════════════
+   RATING ÎN HERO
+══════════════════════════════════════ */
+.hero-rating {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hero-stele {
+    display: flex;
+    gap: 2px;
+}
+
+.hero-rating-text {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.8);
+    font-weight: 300;
+}
+
+.hero-rating-text em {
+    color: rgba(255,255,255,0.55);
+    font-style: normal;
+}
+
+/* Stele generice */
+.stea {
+    color: rgba(255,255,255,0.25);
+    transition: color 0.15s;
+    line-height: 1;
+}
+
+.stea.activa { color: var(--gold-light); }
+
+.stea.normal { font-size: 1rem; }
+.stea.mare   { font-size: 1.35rem; }
+
+/* ══════════════════════════════════════
+   SECȚIUNEA RECENZII
+══════════════════════════════════════ */
+.reviews-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Sumar rating */
+.reviews-sumar {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    border: 1px solid rgba(201,168,76,0.18);
+    box-shadow: var(--shadow);
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.sumar-nota-mare {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 300;
+    color: var(--kaki-dark);
+    line-height: 1;
+    min-width: 80px;
+    text-align: center;
+}
+
+.sumar-dreapta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sumar-stele {
+    display: flex;
+    gap: 3px;
+}
+
+.sumar-stele .stea { color: #ddd; font-size: 1.5rem; }
+.sumar-stele .stea.activa { color: var(--gold); }
+
+.sumar-text {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text-light);
+    font-weight: 300;
+}
+
+/* Card formular recenzie */
+.review-form-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(201,168,76,0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.review-form-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 24px; bottom: 24px;
+    width: 3px;
+    background: linear-gradient(180deg, var(--gold-light), var(--gold), var(--gold-dark));
+    border-radius: 0 2px 2px 0;
+}
+
+/* Selectare stele */
+.stele-selectare-wrap {
+    margin-bottom: 20px;
+}
+
+.stele-selectare {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.stea-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.12s, transform 0.12s;
+    padding: 0;
+    line-height: 1;
+}
+
+.stea-btn.activa { color: var(--gold); }
+
+.stea-btn:hover { transform: scale(1.15); }
+
+.nota-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--kaki-dark);
+    margin-left: 6px;
+}
+
+/* Succes recenzie */
+.review-succes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 0 8px;
+    text-align: center;
+}
+
+.review-succes-icon {
+    font-size: 2rem;
+    color: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.review-succes p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--kaki-dark);
+}
+
+.review-succes-btn {
+    background: none;
+    border: 1px solid rgba(107,124,92,0.3);
+    color: var(--kaki-dark);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.review-succes-btn:hover {
+    background: var(--kaki-dark);
+    color: var(--white);
+    border-color: var(--kaki-dark);
+}
+
+/* Lista recenzii */
+.reviews-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.reviews-lista-titlu {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--kaki-dark);
+    margin-bottom: 4px;
+}
+
+/* Card recenzie individuală */
+.review-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 24px 28px;
+    box-shadow: 0 4px 16px rgba(78,92,67,0.08);
+    border: 1px solid rgba(107,124,92,0.1);
+}
+
+.review-card-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.review-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--kaki-light), var(--kaki-dark));
+    color: var(--white);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.review-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.review-nume {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.review-data {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+}
+
+.review-stele {
+    display: flex;
+    gap: 2px;
+}
+
+.review-stele .stea { color: #ddd; font-size: 1rem; }
+.review-stele .stea.activa { color: var(--gold); }
+
+.review-comentariu {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+@media (max-width: 640px) {
+    .reviews-section { padding: 0 16px; }
+    .reviews-sumar { flex-direction: column; text-align: center; gap: 12px; }
+    .sumar-nota-mare { font-size: 3rem; }
+    .sumar-stele { justify-content: center; }
+    .review-form-card { padding: 24px 20px; }
+    .review-card { padding: 20px; }
+}
